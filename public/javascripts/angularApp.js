@@ -165,7 +165,7 @@ function($stateProvider, $urlRouterProvider) {
 function($scope, posts, auth){
 
   $scope.posts = posts.posts;
-
+  $scope.showPost = false;
   $scope.isLoggedIn = auth.isLoggedIn;
 
   $scope.addPost = function(){
@@ -179,6 +179,7 @@ function($scope, posts, auth){
     $scope.title = '';
     $scope.link = '';
     $scope.description = '';
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -194,6 +195,7 @@ function($scope, posts, auth){
 
   $scope.posts = posts.posts;
   $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.showPost = false;
 
   $scope.addPost = function(){
     if($scope.title === '') { return; }
@@ -205,6 +207,8 @@ function($scope, posts, auth){
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description= ''; 
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -219,6 +223,7 @@ function($scope, posts, auth){
 function($scope, posts, auth){
   $scope.posts = posts.posts
   $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.showPost = false;
 
   $scope.addPost = function(){
     if($scope.title === '') { return; }
@@ -230,6 +235,8 @@ function($scope, posts, auth){
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description = '';
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
