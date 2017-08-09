@@ -30,18 +30,18 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/android.html',
       controller: 'androidCtrl',
       resolve: {
-        post: ['$stateParams', 'android', function($stateParams, posts) {
-          return posts.get($stateParams.id);
+        post: ['$stateParams', 'posts', function($stateParams, posts) {
+          return posts.getAll();
         }]
       }
     });
-    $stateProvider.state('AngularPosts', {
+    $stateProvider.state('angularPosts', {
       url: '/angular',
       templateUrl: '/angular.html',
       controller: 'angularCtrl',
       resolve: {
-        post: ['$stateParams', 'angular', function($stateParams, posts) {
-          return posts.get($stateParams.id);
+        post: ['$stateParams', 'posts', function($stateParams, posts) {
+          return posts.getAll();
         }]
       }
     });
@@ -73,92 +73,6 @@ function($stateProvider, $urlRouterProvider) {
 .factory('posts', ['$http', 'auth', function($http, auth){
   var o = {
     posts: []
-  };
-
-  o.get = function(id) {
-    return $http.get('/posts/' + id).then(function(res){
-      return res.data;
-    });
-  };
-
-  o.getAll = function() {
-    return $http.get('/posts').success(function(data){
-      angular.copy(data, o.posts);
-    });
-  };
-
-  o.create = function(post) {
-    return $http.post('/posts', post, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    }).success(function(data){
-      o.posts.push(data);
-    });
-  };
-
-  o.upvote = function(post) {
-    return $http.put('/posts/' + post._id + '/upvote', null, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    }).success(function(data){
-      post.upvotes += 1;
-    });
-  };
-
-  o.addComment = function(id, comment) {
-    return $http.post('/posts/' + id + '/comments', comment, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    });
-  };
-
-  return o;
-}])
-
-//angular factory
-.factory('angular', ['$http', 'auth', function($http, auth){
-  var o = {
-    AngularPosts: []
-  };
-
-  o.get = function(id) {
-    return $http.get('/posts/' + id).then(function(res){
-      return res.data;
-    });
-  };
-
-  o.getAll = function() {
-    return $http.get('/posts').success(function(data){
-      angular.copy(data, o.posts);
-    });
-  };
-
-  o.create = function(post) {
-    return $http.post('/posts', post, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    }).success(function(data){
-      o.posts.push(data);
-    });
-  };
-
-  o.upvote = function(post) {
-    return $http.put('/posts/' + post._id + '/upvote', null, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    }).success(function(data){
-      post.upvotes += 1;
-    });
-  };
-
-  o.addComment = function(id, comment) {
-    return $http.post('/posts/' + id + '/comments', comment, {
-      headers: {Authorization: 'Bearer '+auth.getToken()}
-    });
-  };
-
-  return o;
-}])
-
-//android factory
-.factory('android', ['$http', 'auth', function($http, auth){
-  var o = {
-    androidPosts: []
   };
 
   o.get = function(id) {
@@ -247,15 +161,11 @@ function($stateProvider, $urlRouterProvider) {
 .controller('MainCtrl', [
 '$scope',
 'posts',
-'angular',
-'android',
 'auth',
-function($scope, posts, angular, android, auth){
+function($scope, posts, auth){
 
   $scope.posts = posts.posts;
-  $scope.posts = $scope.posts.concat(angular);
-  $scope.posts = $scope.posts.concat(android);
-
+  $scope.showPost = false;
   $scope.isLoggedIn = auth.isLoggedIn;
 
   $scope.addPost = function(){
@@ -263,9 +173,13 @@ function($scope, posts, angular, android, auth){
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: $scope.practiceType,
+      description: $scope.description,
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description = '';
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -281,15 +195,20 @@ function($scope, posts, auth){
 
   $scope.posts = posts.posts;
   $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.showPost = false;
 
   $scope.addPost = function(){
     if($scope.title === '') { return; }
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: 'Android',
+      description: $scope.description
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description= ''; 
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -302,18 +221,22 @@ function($scope, posts, auth){
 'posts',
 'auth',
 function($scope, posts, auth){
-
-  $scope.posts = posts.posts;
+  $scope.posts = posts.posts
   $scope.isLoggedIn = auth.isLoggedIn;
+  $scope.showPost = false;
 
   $scope.addPost = function(){
     if($scope.title === '') { return; }
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: 'Angular',
+      description: $scope.description
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description = '';
+    $scope.showPost = false;
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -330,6 +253,7 @@ function($scope, posts, post, auth){
   $scope.post = post;
   $scope.isLoggedIn = auth.isLoggedIn;
 
+  console.log(post)
   $scope.addComment = function(){
     if($scope.body === '') { return; }
     posts.addComment(post._id, {
