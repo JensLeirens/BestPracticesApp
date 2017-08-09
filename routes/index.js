@@ -16,6 +16,7 @@ var User = mongoose.model('User');
 
 var auth = jwt({secret: 'SECRET', userProperty: 'payload'});
 
+//getting posts
 router.get('/posts', function(req, res, next) {
   Post.find(function(err, posts){
     if(err){ return next(err); }
@@ -69,7 +70,6 @@ router.get('/posts/:post', function(req, res, next) {
     res.json(post);
   });
 });
-
 
 // upvote a post
 router.put('/posts/:post/upvote', auth, function(req, res, next) {
