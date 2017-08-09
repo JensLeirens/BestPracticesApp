@@ -30,7 +30,7 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/android.html',
       controller: 'androidCtrl',
       resolve: {
-        post: ['$stateParams', 'android', function($stateParams, posts) {
+        post: ['$stateParams', 'posts', function($stateParams, posts) {
           return posts.getAll();
         }]
       }
@@ -40,7 +40,7 @@ function($stateProvider, $urlRouterProvider) {
       templateUrl: '/angular.html',
       controller: 'angularCtrl',
       resolve: {
-        post: ['$stateParams', 'angular', function($stateParams, posts) {
+        post: ['$stateParams', 'posts', function($stateParams, posts) {
           return posts.getAll();
         }]
       }
@@ -173,9 +173,12 @@ function($scope, posts, auth){
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: $scope.practiceType,
+      description: $scope.description,
     });
     $scope.title = '';
     $scope.link = '';
+    $scope.description = '';
   };
 
   $scope.incrementUpvotes = function(post) {
@@ -197,6 +200,8 @@ function($scope, posts, auth){
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: 'Android',
+      description: $scope.description
     });
     $scope.title = '';
     $scope.link = '';
@@ -220,6 +225,8 @@ function($scope, posts, auth){
     posts.create({
       title: $scope.title,
       link: $scope.link,
+      practiceType: 'Angular',
+      description: $scope.description
     });
     $scope.title = '';
     $scope.link = '';
@@ -239,6 +246,7 @@ function($scope, posts, post, auth){
   $scope.post = post;
   $scope.isLoggedIn = auth.isLoggedIn;
 
+  console.log(post)
   $scope.addComment = function(){
     if($scope.body === '') { return; }
     posts.addComment(post._id, {
