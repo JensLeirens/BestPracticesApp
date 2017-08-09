@@ -25,6 +25,26 @@ function($stateProvider, $urlRouterProvider) {
         }]
       }
     });
+    $stateProvider.state('androidPosts', {
+      url: '/android',
+      templateUrl: '/android.html',
+      controller: 'androidCtrl',
+      resolve: {
+        post: ['$stateParams', 'android', function($stateParams, posts) {
+          return posts.get($stateParams.id);
+        }]
+      }
+    });
+    $stateProvider.state('AngularPosts', {
+      url: '/angular',
+      templateUrl: '/angular.html',
+      controller: 'angularCtrl',
+      resolve: {
+        post: ['$stateParams', 'angular', function($stateParams, posts) {
+          return posts.get($stateParams.id);
+        }]
+      }
+    });
     $stateProvider.state('login', {
       url: '/login',
       templateUrl: '/login.html',
