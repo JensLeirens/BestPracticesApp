@@ -76,7 +76,7 @@
             <label>Description</label>
             <textarea class="form-control" rows="5" ng-model="description" required></textarea>
         </div>
-      <button type="submit" class="btn btn-primary">Post</button>
+      <button type="submit" class="btn btn-primary">Add practice</button>
     </form>
 
 
@@ -131,7 +131,7 @@
           <label>Description</label>
           <textarea class="form-control" rows="5" ng-model="description" required></textarea>
       </div>
-    <button type="submit" class="btn btn-primary">Post</button>
+    <button type="submit" class="btn btn-primary">Add practice</button>
   </form>
 
   <div ng-hide="isLoggedIn()">
@@ -164,7 +164,7 @@
   </div>
 
   <form ng-submit="addPost()"
-    style="margin-top:30px;" ng-show="showPost()">
+    style="margin-top:30px;" ng-show="showPost">
     <h3>Add a new Best Practice</h3>
 
     <div class="form-group">
@@ -185,7 +185,7 @@
           <label>Description</label>
           <textarea class="form-control" rows="5" ng-model="description" required></textarea>
       </div>
-    <button type="submit" class="btn btn-primary">Post</button>
+    <button type="submit" class="btn btn-primary">Add practice</button>
   </form>
 
   <div ng-hide="isLoggedIn()">
